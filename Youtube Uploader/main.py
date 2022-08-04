@@ -3,7 +3,6 @@ import os
 import random
 import time
 import sys
-from pymediainfo import MediaInfo
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
