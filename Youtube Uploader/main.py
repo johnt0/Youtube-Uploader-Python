@@ -199,7 +199,7 @@ class Main(QMainWindow):
     self.video_name = self.titleName.text()
     
   def setDescription(self):
-    self.video_desc = self.description.text()
+    self.video_desc = self.video_description.text()
     
   def setPrivacy(self):
     self.video_privacy = self.privacyStatus.currentText()

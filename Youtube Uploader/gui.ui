@@ -50,16 +50,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="description">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>170</y>
-      <width>211</width>
-      <height>121</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="publishVideo">
     <property name="geometry">
      <rect>
@@ -80,6 +70,16 @@
       <y>300</y>
       <width>161</width>
       <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="videoDescription">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>170</y>
+      <width>211</width>
+      <height>121</height>
      </rect>
     </property>
    </widget>
