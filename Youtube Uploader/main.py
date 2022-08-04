@@ -2,17 +2,35 @@ import httplib2
 import os
 import random
 import time
-
+import sys
+from pymediainfo import MediaInfo
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
-
-import sys
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication
+from PyQt5.QtWidgets import QFileDialog, QMainWindow, QApplication, QMessageBox
 from PyQt5.uic import loadUi
+from PyQt5 import QtWidgets
+
+#YOUTUBE VALID VIDEO FORMATS
+YOUTUBE_FORMATS = ('.MOV',
+'.MPEG-1',
+'.MPEG-2',
+'.MPEG4',
+'.MP4',
+'.MPG',
+'.AVI',
+'.WMV',
+'.MPEGPS',
+'.FLV',
+'.3GPP',
+'.WebM',
+'.DNxHR',
+'.ProRes',
+'.CineForm',
+'.HEVC')
 
 # Explicitly tell the underlying HTTP transport library not to retry, since
 # we are handling retry logic ourselves.
@@ -152,6 +170,8 @@ def resumable_upload(insert_request):
       time.sleep(sleep_seconds)
 
 class Main(QMainWindow):
+  video_file_path = ""
+  video_name = ""
   description = "test"
   category = "22"
   keywords = "test"
@@ -185,16 +205,31 @@ class Main(QMainWindow):
   def setPrivacy(self):
     self.video_privacy = self.privacyStatus.currentText()
 
-  def submit(self):    
-    youtube = get_authenticated_service(self)
-    try:
-      initialize_upload(youtube, self)
-    except HttpError as e:
-      print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))  
+  def submit(self):
+    error_msg = QMessageBox()
+    youtube_formats_lower = [(format.lower()) for format in YOUTUBE_FORMATS]
+    if not self.video_file_path.endswith(tuple(youtube_formats_lower)):
+      error_msg.setText("oh no that file is not a valid youtube format!")
+      error_msg.exec()
+    elif not self.video_name and not self.video_file_path:
+      error_msg.setText("oh no you forgot to put a title and a file!")
+      error_msg.exec()
+    elif not self.video_name:
+      error_msg.setText("oh no you forgot to put a title")
+      error_msg.exec()
+    elif not self.video_file_path:
+      error_msg.setText("oh no you forgot to put a file!")
+      error_msg.exec()
+    else:
+      youtube = get_authenticated_service(self)
+      try:
+        initialize_upload(youtube, self)
+      except HttpError as e:
+        print("An HTTP error %d occurred:\n%s" % (e.resp.status, e.content))  
 
 if __name__ == '__main__':
-  #begin UI
   app = QApplication(sys.argv)
+  #begin UI
   ui = Main()
   ui.show()
   app.exec_()
